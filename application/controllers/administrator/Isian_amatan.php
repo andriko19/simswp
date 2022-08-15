@@ -260,6 +260,27 @@ class Isian_amatan extends Admin
 	{
 		$this->is_allowed('isian_amatan_update');
 
+		// Role guru SMP = 11
+    // Role guru SMP = 12
+    // Role guru SMP = 13
+    $role = $this->session->groups;
+
+    $all            = "4";
+    $smk            = "3";
+    $sma            = "2";
+    $smp            = "1";
+
+    if ($role == '11') {
+      $this->data['kode_indikatorEdit'] = $this->model_isian_amatan->kode_indikatorSMPEdit($smk, $sma);
+    }
+    elseif ($role == '12') {
+      $this->data['kode_indikatorEdit'] = $this->model_isian_amatan->kode_indikatorSMAEdit($smk, $smp);
+    }
+    elseif ($role == '13') { 
+      $this->data['kode_indikatorEdit'] = $this->model_isian_amatan->kode_indikatorSMKEdit($sma, $smp);
+     
+    }
+		
 		$this->data['isian_amatan'] = $this->model_isian_amatan->find($id);
 
 		$this->template->title('Isian Amatan Update');
