@@ -134,6 +134,8 @@ class Isian_amatan extends Admin
 
 			$this->data['isian_amatans'] = $this->model_isian_amatan->get2($filter, $field, $this->limit_page, $offset);
 			$this->data['isian_amatan_counts'] = $this->model_isian_amatan->count_all2($filter, $field);
+			
+			// var_dump($this->data['isian_amatans']); die;
 
 			$config = [
 				'base_url'     => 'administrator/isian_amatan/index/',
@@ -212,6 +214,8 @@ class Isian_amatan extends Admin
 
 			
 			$save_isian_amatan = $this->model_isian_amatan->store($save_data);
+			// var_dump($save_data);
+			// die;
 
 			if ($save_isian_amatan) {
 				if ($this->input->post('save_type') == 'stay') {

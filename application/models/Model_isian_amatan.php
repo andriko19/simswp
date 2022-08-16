@@ -21,6 +21,18 @@ class Model_isian_amatan extends MY_Model {
 		parent::__construct($config);
 	}
 
+	private function maxIdPeriodeList() {
+    $this->db->select_max('id_periode');
+    // $this->db->from();
+    $query = $this->db->get('periode');
+
+		foreach ($query->result_array() as $data ){
+			$maxIdPeriode = $data['id_periode'];
+		}
+
+    return $maxIdPeriode;
+  }
+
 	public function count_all($q = null, $field = null)
 	{
 		$iterasi = 1;
@@ -43,6 +55,8 @@ class Model_isian_amatan extends MY_Model {
         } else {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
+
+				$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 		$this->join_avaiable();
     $this->db->where($where);
@@ -78,6 +92,8 @@ class Model_isian_amatan extends MY_Model {
         	$this->db->select($select_field);
         }
 		
+				$where .= " and rombel.periode=".$this->maxIdPeriodeList();
+
 		$this->join_avaiable();
     $this->db->where($where);
     $this->db->limit($limit, $offset);
@@ -111,9 +127,10 @@ class Model_isian_amatan extends MY_Model {
         }
 
 		$b = $this->session->id;
-		$c = $this->model_isian_amatan->getId($b);
+		$c = $this->getId($b);
 
-		$where .= "and id_pengamat=".$c;
+		$where .= " and id_pengamat=".$c;
+		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 		$this->join_avaiable();
     $this->db->where($where);
@@ -125,9 +142,9 @@ class Model_isian_amatan extends MY_Model {
 	public function get2($q = null, $field = null, $limit = 0, $offset = 0, $select_field = [])
 	{
 		$iterasi = 1;
-        $num = count($this->field_search);
-        $where = NULL;
-        $q = $this->scurity($q);
+		$num = count($this->field_search);
+		$where = NULL;
+		$q = $this->scurity($q);
 		$field = $this->scurity($field);
 
         if (empty($field)) {
@@ -146,18 +163,19 @@ class Model_isian_amatan extends MY_Model {
         }
 
 		$b = $this->session->id;
-		$c = $this->model_isian_amatan->getId($b);
+		$c = $this->getId($b);
 
-		$where .= "and id_pengamat=".$c;
+		$where .= " and id_pengamat=".$c;
+		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
         if (is_array($select_field) AND count($select_field)) {
         	$this->db->select($select_field);
         }
 		
 		$this->join_avaiable();
-        $this->db->where($where);
-        $this->db->limit($limit, $offset);
-        $this->db->order_by('isian_amatan.'.$this->primary_key, "DESC");
+		$this->db->where($where);
+		$this->db->limit($limit, $offset);
+		$this->db->order_by('isian_amatan.'.$this->primary_key, "DESC");
 		$query = $this->db->get($this->table_name);
 
 		return $query->result();
@@ -430,7 +448,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-		$where .= "and isian_amatan.id_kodesekolah=".$this->smp;
+		$where .= " and isian_amatan.id_kodesekolah=".$this->smp;
+		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 		if ($BulanAwal != null) {
       $where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -473,7 +492,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-        $where .= "and isian_amatan.id_kodesekolah=".$this->smp;
+        $where .= " and isian_amatan.id_kodesekolah=".$this->smp;
+				$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 				if ($BulanAwal != null) {
 					$where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -522,7 +542,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-		$where .= "and isian_amatan.id_kodesekolah=".$this->sma;
+		$where .= " and isian_amatan.id_kodesekolah=".$this->sma;
+		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 		if ($BulanAwal != null) {
       $where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -565,7 +586,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-        $where .= "and isian_amatan.id_kodesekolah=".$this->sma;
+        $where .= " and isian_amatan.id_kodesekolah=".$this->sma;
+				$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 				if ($BulanAwal != null) {
 					$where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -614,7 +636,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-		$where .= "and isian_amatan.id_kodesekolah=".$this->smk;
+		$where .= " and isian_amatan.id_kodesekolah=".$this->smk;
+		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 		if ($BulanAwal != null) {
 			$where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -657,7 +680,8 @@ class Model_isian_amatan extends MY_Model {
         	$where .= "(" . $field . " LIKE '%" . $q . "%' )";
         }
 
-        $where .= "and isian_amatan.id_kodesekolah=".$this->smk;
+        $where .= " and isian_amatan.id_kodesekolah=".$this->smk;
+				$where .= " and rombel.periode=".$this->maxIdPeriodeList();
 
 				if ($BulanAwal != null) {
 					$where .= " and MONTH(isian_amatan.tanggal)>=".$BulanAwal;
@@ -679,7 +703,7 @@ class Model_isian_amatan extends MY_Model {
 	}
 
 	public function isian_amatan_bk_detail($id_siswa, $id_sekolah, $getBulanAwal = null, $getTahunAwal = null, $getBulanAkhir = null) {
-
+		$maxIdPeriodeList = $this->maxIdPeriodeList();
 		$this->db->select('isian_amatan.*, guru.nama_guru as nama_pengamat, minggu_ke, kode_sekolah.kode_sekolah as kode_sekolah, rombel.nama_rombel as kelas, nama, isian_amatan.isi_amatan as isi_amatan, kode_indikator, nama_lokasi, jenis_pengamat, status_amatan.status_amatan as nama_status_amatan');
 
 		$this->db->join('minggu_ke', 'minggu_ke.id_minggu_ke = isian_amatan.minggu', 'LEFT');
@@ -698,9 +722,9 @@ class Model_isian_amatan extends MY_Model {
 		$this->db->order_by('isian_amatan.tanggal', "ASC");
 		// $this->db->limit(15);
     if ($getBulanAwal != null) {
-      $query = $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>$id_sekolah, 'isian_amatan.id_siswa'=>$id_siswa, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)='=>$getTahunAwal));
+      $query = $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>$id_sekolah, 'isian_amatan.id_siswa'=>$id_siswa, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)='=>$getTahunAwal, 'rombel.periode' =>$maxIdPeriodeList));
     } else {
-      $query = $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>$id_sekolah, 'isian_amatan.id_siswa'=>$id_siswa));
+      $query = $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>$id_sekolah, 'isian_amatan.id_siswa'=>$id_siswa, 'rombel.periode' =>$maxIdPeriodeList));
     }
 
     if($query->num_rows()>0) {

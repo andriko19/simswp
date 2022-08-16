@@ -56,7 +56,8 @@ jQuery(document).ready(domo);
                           <?php
                             $querySemester =  $this->db->query('SELECT *
                                               FROM semester
-                                              JOIN periode ON periode.id_periode = semester.id_periode');
+                                              JOIN periode ON periode.id_periode = semester.id_periode
+                                              ORDER BY id_semester DESC');
                             $sqlSemseter = $querySemester->result();
                           ?>
                           
