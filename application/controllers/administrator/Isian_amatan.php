@@ -282,6 +282,9 @@ class Isian_amatan extends Admin
     }
     elseif ($role == '13') { 
       $this->data['kode_indikatorEdit'] = $this->model_isian_amatan->kode_indikatorSMKEdit($sma, $smp);
+    }
+		elseif ($role == '7' || $role == '1') { 
+      $this->data['kode_indikatorEdit'] = $this->model_isian_amatan->kode_indikatorPBPEdit();
      
     }
 		

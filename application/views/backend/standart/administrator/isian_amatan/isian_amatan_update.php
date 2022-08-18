@@ -143,8 +143,8 @@
                             <div class="col-sm-8">
                                 <select  class="form-control chosen chosen-select-deselect" name="id_indikator_pbp" id="id_indikator_pbp" data-placeholder="Select Kode Indikator" >
                                     <option value=""></option>
-                                    <?php foreach (db_get_all_data('indikator_amatan_pbp') as $row): ?>
-                                    <option <?=  $row->id_indikator_pbp ==  $isian_amatan->id_indikator_pbp ? 'selected' : ''; ?> value="<?= $row->id_indikator_pbp ?>"><?= $row->kode_indikator.' / '.$row->indikator; ?></option>
+                                    <?php foreach ($kode_indikatorEdit as $row): ?>
+                                        <option <?=  $row->id_indikator_pbp ==  $isian_amatan->id_indikator_pbp ? 'selected' : ''; ?> value="<?= $row->id_indikator_pbp ?>"><?= $row->kode_sekolah.' / '. $row->kode_indikator.' / '.$row->indikator; ?></option>
                                     <?php endforeach; ?> 
                                 </select>
                                 <small class="info help-block">

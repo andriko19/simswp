@@ -36,9 +36,9 @@ class Model_isian_amatan extends MY_Model {
 	public function count_all($q = null, $field = null)
 	{
 		$iterasi = 1;
-        $num = count($this->field_search);
-        $where = NULL;
-        $q = $this->scurity($q);
+		$num = count($this->field_search);
+		$where = NULL;
+		$q = $this->scurity($q);
 		$field = $this->scurity($field);
 
         if (empty($field)) {
@@ -110,7 +110,17 @@ class Model_isian_amatan extends MY_Model {
     $where = NULL;
     $q = $this->scurity($q);
 		$field = $this->scurity($field);
-
+		$role = $this->session->groups;
+		
+		// var_dump($role);
+		// die;
+		if($role == 11){
+			$id_kodesekolah == 1;
+		}elseif ($role == 12) {
+			$id_kodesekolah == 2;
+		}elseif ($role == 13) {
+			$id_kodesekolah == 3;
+		}
         if (empty($field)) {
 	        foreach ($this->field_search as $field) {
 	            if ($iterasi == 1) {
@@ -131,6 +141,7 @@ class Model_isian_amatan extends MY_Model {
 
 		$where .= " and id_pengamat=".$c;
 		$where .= " and rombel.periode=".$this->maxIdPeriodeList();
+		$where .= " and isian_amatan.id_kodesekolah=".$id_kodesekolah;
 
 		$this->join_avaiable();
     $this->db->where($where);
@@ -281,6 +292,18 @@ class Model_isian_amatan extends MY_Model {
 			$kode_indikator.= "<option value='$data[id_indikator_pbp]'>$data[kode_sekolah] / $data[kode_indikator] / $data[indikator]</option>";
 		}
 		return $kode_indikator;
+	}
+
+	public function kode_indikatorPBPEdit() {
+		$this->db->select('*');
+		// $this->db->from('indikator_amatan_pbp');
+		$this->db->join('kode_sekolah', 'kode_sekolah.id_kodesekolah = indikator_amatan_pbp.id_kodesekolah', 'LEFT');
+		// $this->db->where('kode_sekolah.id_kodesekolah !=', $smp);
+    // $this->db->where('kode_sekolah.id_kodesekolah !=', $sma);
+
+		$query = $this->db->get('indikator_amatan_pbp');
+
+		return $query->result();
 	}
 
 	public function nama_siswa($id_siswa) {
