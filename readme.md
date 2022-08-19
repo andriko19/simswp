@@ -10,6 +10,7 @@ CiCOOL
 - Form Builder
 - HTML Page Builder
 - Admin LTE Themes
+- Version PHP 5.6
 
 **Library**
 - template library : https://github.com/philsturgeon/codeigniter-template
