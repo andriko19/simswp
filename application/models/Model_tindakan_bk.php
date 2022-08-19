@@ -21,6 +21,18 @@ class Model_tindakan_bk extends MY_Model {
 		parent::__construct($config);
 	}
 
+	public function maxIdPeriodeList() {
+    $this->db->select_max('id_periode');
+    // $this->db->from();
+    $query = $this->db->get('periode');
+
+		foreach ($query->result_array() as $data ){
+			$maxIdPeriode = $data['id_periode'];
+		}
+
+    return $maxIdPeriode;
+  }
+
 	public function count_all($q = null, $field = null, $getBulanAwal = null, $getTahunAwal = null, $getBulanAkhir = null)
 	{
 		$table_name 	= 'isian_amatan';
@@ -471,26 +483,28 @@ class Model_tindakan_bk extends MY_Model {
 
 	public function count_allRombel($id_kodesekolah)
 	{
+		$maxIdPeriodeList = $this->maxIdPeriodeList();
 		$this->db->select('id_rombel, nama_rombel');
 
 		$this->db->group_by('rombel.nama_rombel');
 		
 		$this->db->order_by('rombel.nama_rombel', "ASC");
 		
-		$query = $this->db->get_where('rombel', array('rombel.kode_sekolah'=>$id_kodesekolah));
+		$query = $this->db->get_where('rombel', array('rombel.kode_sekolah'=>$id_kodesekolah, 'rombel.periode' =>$maxIdPeriodeList));
 
     return $query->num_rows();
 	}
 
 	public function getRombel($id_kodesekolah)
 	{
+		$maxIdPeriodeList = $this->maxIdPeriodeList();
 		$this->db->select('id_rombel, nama_rombel, kode_sekolah');
 
 		$this->db->group_by('rombel.nama_rombel');
 		
 		$this->db->order_by('rombel.nama_rombel', "ASC");
 		
-		$query = $this->db->get_where('rombel', array('rombel.kode_sekolah'=>$id_kodesekolah));
+		$query = $this->db->get_where('rombel', array('rombel.kode_sekolah'=>$id_kodesekolah, 'rombel.periode' =>$maxIdPeriodeList));
 
     if($query->num_rows()>0) {
 		 	return $query->result();
@@ -499,6 +513,7 @@ class Model_tindakan_bk extends MY_Model {
 
 	public function count_allAmatan($id_rombel, $getBulanAwal = null, $getTahunAwal = null, $getBulanAkhir = null)
 	{
+		$maxIdPeriodeList = $this->maxIdPeriodeList();
 		$this->db->select('id_isian_amatan, isian_amatan.tanggal as tanggal, kode_sekolah.id_kodesekolah as id_kodesekolah, kode_sekolah.kode_sekolah as kode_sekolah, rombel.nama_rombel as kelas, nama,
 
 			count(status_amatan.id_status_amatan) as total_status, isian_amatan.id_siswa as id_siswa');
@@ -522,10 +537,10 @@ class Model_tindakan_bk extends MY_Model {
 		// $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>1));
 		
 		if ($getBulanAwal != null) {
-			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)'=>$getTahunAwal));
+			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)'=>$getTahunAwal, 'rombel.periode' =>$maxIdPeriodeList));
       // $where .= " and YEAR(isian_amatan.tanggal)>=".$TahunAkhir;
     } else {
-			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel));
+			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'rombel.periode' =>$maxIdPeriodeList));
 		}
 
     return $query->num_rows();
@@ -533,6 +548,7 @@ class Model_tindakan_bk extends MY_Model {
 
 	public function getAmatan($id_rombel, $getBulanAwal = null, $getTahunAwal = null, $getBulanAkhir = null)
 	{
+		$maxIdPeriodeList = $this->maxIdPeriodeList();
 		$this->db->select('id_isian_amatan, isian_amatan.tanggal as tanggal, kode_sekolah.id_kodesekolah as id_kodesekolah, kode_sekolah.kode_sekolah as kode_sekolah, rombel.id_rombel as id_rombel, rombel.nama_rombel as kelas, nama,
 
 			count(status_amatan.id_status_amatan) as total_status, isian_amatan.id_siswa as id_siswa');
@@ -556,10 +572,10 @@ class Model_tindakan_bk extends MY_Model {
 		// $this->db->get_where('isian_amatan', array('isian_amatan.id_kodesekolah'=>1));
 
 		if ($getBulanAwal != null) {
-			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)='=>$getTahunAwal));
+			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'MONTH(isian_amatan.tanggal)>='=>$getBulanAwal, 'MONTH(isian_amatan.tanggal)<='=>$getBulanAkhir, 'YEAR(isian_amatan.tanggal)='=>$getTahunAwal, 'rombel.periode' =>$maxIdPeriodeList));
       // $where .= " and YEAR(isian_amatan.tanggal)>=".$TahunAkhir;
     } else {
-			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel));
+			$query = $this->db->get_where('isian_amatan', array('rombel.id_rombel'=>$id_rombel, 'rombel.periode' =>$maxIdPeriodeList));
 		}
 
     if($query->num_rows()>0) {

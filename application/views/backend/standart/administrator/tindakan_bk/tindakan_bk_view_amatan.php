@@ -83,8 +83,8 @@ jQuery(document).ready(domo);
                            <th>Sekolah</th>
                            <th>Kelas</th>
                            <th>Nama Siswa</th>
-                           <th>Jumlah Klinis</th>
-                           <th>Jumlah Amatan</th>
+                           <th>Total Klinis</th>
+                           <th>Total Amatan</th>
                            <th>Action</th>
                         </tr>
                      </thead>

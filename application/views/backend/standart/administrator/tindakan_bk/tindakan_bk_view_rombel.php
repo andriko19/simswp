@@ -73,7 +73,7 @@ jQuery(document).ready(domo);
                   </div>
 
                   <form name="form_tindakan_bk" id="form_tindakan_bk" action="<?= base_url('administrator/tindakan_bk/index'); ?>">
-                  
+                  <!-- <?=$maxIdPeriodeList;?> -->
 
                   <div class="table-responsive"> 
                   <table class="table table-bordered table-striped dataTable">
@@ -96,15 +96,31 @@ jQuery(document).ready(domo);
 
                             <?php 
                               $id_rombel=$tindakan_bk->id_rombel;
+                              // $maxIdPeriodeList=$maxIdPeriodeList;
                               if ($id_semester != null) {
-                                $query = $this->db->query("select count(isian_amatan.id_siswa) as total from isian_amatan join detail_rombel on isian_amatan.id_siswa = detail_rombel.id_siswa where detail_rombel.id_rombel=$id_rombel and MONTH(isian_amatan.tanggal)>=$getBulanAwal and MONTH(isian_amatan.tanggal)<=$getBulanAkhir and YEAR(isian_amatan.tanggal)=$getTahunAwal");
+                                $query1 = $this->db->query("
+                                select count(isian_amatan.id_siswa) as total 
+                                from isian_amatan 
+                                join detail_rombel on isian_amatan.id_siswa = detail_rombel.id_siswa
+                                join rombel on detail_rombel.id_rombel = rombel.id_rombel
+                                where detail_rombel.id_rombel=$id_rombel 
+                                and MONTH(isian_amatan.tanggal)>=$getBulanAwal 
+                                and MONTH(isian_amatan.tanggal)<=$getBulanAkhir 
+                                and YEAR(isian_amatan.tanggal)=$getTahunAwal 
+                                and rombel.periode=$maxIdPeriodeList");
+                                $result=$query1->row();
                               } else {
-                                $query = $this->db->query("select count(isian_amatan.id_siswa) as total from isian_amatan join detail_rombel on isian_amatan.id_siswa = detail_rombel.id_siswa where detail_rombel.id_rombel=$id_rombel");
+                                $query2 = $this->db->query("
+                                select count(isian_amatan.id_siswa) as total
+                                from isian_amatan
+                                join detail_rombel on isian_amatan.id_siswa = detail_rombel.id_siswa
+                                join rombel on rombel.id_rombel = detail_rombel.id_rombel
+                                where detail_rombel.id_rombel=$id_rombel
+                                and rombel.periode=$maxIdPeriodeList");
+                                $result=$query2->row();
                               }
-                              
-                              $result=$query->row();
                             ?>
-
+                           
                            <td><?= _ent($result->total); ?></td>
                            <td width="200">
                                <a href="<?= site_url('administrator/tindakan_bk/view_amatan/' . $tindakan_bk->kode_sekolah .'/'. $tindakan_bk->id_rombel .'/'. $id_semester); ?>" class="label-default"><i class="fa fa-newspaper-o"> </i> Lihat Detail </a>

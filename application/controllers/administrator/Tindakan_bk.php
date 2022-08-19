@@ -380,6 +380,7 @@ class Tindakan_bk extends Admin
 		$this->data['getBulanAwal'] =  $getBulanAwal;
 		$this->data['getBulanAkhir'] =  $getBulanAkhir;
 		$this->data['getTahunAwal'] =  $getTahunAwal;
+		$this->data['maxIdPeriodeList'] = $this->model_tindakan_bk->maxIdPeriodeList();
 
 			$config = [
 				'base_url'     => 'administrator/tindakan_bk/view_rombel/',
